@@ -7,6 +7,7 @@ import requests
 import threading
 from pyvis.network import Network
 import dropbox
+from openai import OpenAI
 
 
 os.makedirs("downloads", exist_ok=True)
@@ -69,8 +70,6 @@ def download_latest_audio_file(account_id):
     return local_path
 
 # --- WHISPER TRANSCRIPTION ---
-
-from openai import OpenAI
 
 client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 
