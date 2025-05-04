@@ -121,19 +121,24 @@ def process_dropbox_account(account_id):
         app.logger.error(f"Error processing account {account_id}: {str(e)}", exc_info=True)
 
 def download_latest_audio_file(account_id):
-    """Download the latest audio file from Dropbox"""
+    """Download the latest audio file from Dropbox App Folder"""
     try:
         dbx = dropbox.Dropbox(os.environ.get("DROPBOX_ACCESS_TOKEN"))
-        folder_path = f"/account_{account_id}"
         
-        app.logger.debug(f"Listing files in Dropbox folder: {folder_path}")
+        # Use the root of the App Folder
+        folder_path = ""
+        
+        app.logger.debug(f"Listing files in Dropbox App Folder: {folder_path}")
         result = dbx.files_list_folder(folder_path)
         
         if not result.entries:
-            app.logger.warning(f"No files found in folder: {folder_path}")
+            app.logger.warning("No files found in App Folder")
             return None
         
-        latest_file = result.entries[0]
+        # Find the latest audio file (simplified example)
+        # You might want to filter by file extension or other criteria
+        latest_file = max(result.entries, key=lambda entry: entry.server_modified)
+        
         local_path = f"downloads/{latest_file.name}"
         
         app.logger.debug(f"Downloading file: {latest_file.path_display}")
